@@ -30,6 +30,7 @@ Resources:
       CodeUri: website_checker/
       Handler: app.lambda_handler
       Runtime: python3.8
+      Tracing: Active
       Events:
         WebsiteChecker:
           Type: Api
@@ -42,6 +43,13 @@ Resources:
       CodeUri: create_todo/
       Handler: app.lambda_handler
       Runtime: python3.8
+      Tracing: Active
+      Events:
+        CreateTodo:
+          Type: Api
+          Properties:
+            Path: /todo-list/create
+            Method: get
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
