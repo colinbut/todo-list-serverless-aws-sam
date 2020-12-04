@@ -1,23 +1,29 @@
 import json
 import boto3
 import uuid
+import logging
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
-    print("event: {}".format(event))
-    print("context: {}".format(context))
+    logger.debug("event: {}".format(event))
+    logger.debug("context: {}".format(context))
 
-    print("Inserting todo: {} into database".format(event))
+    logger.info("Inserting todo: {} into database".format(event))
 
-    client = boto3.client('dynamodb')
-    client.put_item(
-        TableName='Todos',
+    body = json.loads(event.get('body'))
+
+    client = boto3.resource('dynamodb')
+    table = client.Table('Todos')
+    table.put_item(
         Item={
-            "item_id": str(uuid.uuid1()),
-            "item_title": event.title,
-            "item_content": event.content
+            'item_id': str(uuid.uuid1()),
+            'item_title': body.get('title'),
+            'item_content': body.get('content')
         }
     )
 
-    print("Inserted todo: {} into database".format(event))
+    logger.info("Inserted todo: {} into database".format(event))
 
     return {"statusCode": 201}
