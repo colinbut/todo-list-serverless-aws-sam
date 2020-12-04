@@ -44,12 +44,19 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: DynamoDBPutParameterPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:PutItem
+          Resource: '*'
       Events:
         CreateTodo:
           Type: Api
           Properties:
             Path: /todo-list/create
-            Method: get
+            Method: post
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
