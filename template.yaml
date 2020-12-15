@@ -58,6 +58,27 @@ Resources:
             Path: /todo-list/create
             Method: post
 
+  ListTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: list_todos/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: DynamoDBGetParameterPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:Scan
+          Resource: '*'
+      Events:
+        ListTodo:
+          Type: Api
+          Properties:
+            Path: /todo-list/list
+            Method: get
+
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   WebsiteCheckerApi:
