@@ -22,7 +22,9 @@ def lambda_handler(event, context):
             'item_id': str(uuid.uuid1()),
             'title': body.get('title'),
             'content': body.get('content'),
-            'created_date': datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+            'created_date': datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+            'is_archived': False,
+            'is_deleted': False
         }
     )
 
