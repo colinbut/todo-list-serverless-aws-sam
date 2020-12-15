@@ -2,6 +2,7 @@ import json
 import boto3
 import uuid
 import logging
+from datetime import datetime
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -19,8 +20,9 @@ def lambda_handler(event, context):
     table.put_item(
         Item={
             'item_id': str(uuid.uuid1()),
-            'item_title': body.get('title'),
-            'item_content': body.get('content')
+            'title': body.get('title'),
+            'content': body.get('content'),
+            'created_date': datetime.now().strftime("%d-%m-%Y %H:%M:%S")
         }
     )
 
