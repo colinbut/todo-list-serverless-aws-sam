@@ -120,6 +120,15 @@ Outputs:
   WebsiteCheckerApi:
     Description: "API Gateway endpoint URL for Prod stage for Website Checker function"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/checker/"
+  CreateTodoApi:
+    Description: "API Gateway endpoint URL for Prod stage for Create Todo function"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/create"
+  ListTodosApi:
+    Description: "API Gateway endpoint URL for Prod stage for List Todos function"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/list"
+  UpdateTodoApi:
+    Description: "API Gateway endpoint URL for Prod stage for Update Todo function"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/update"
   WebsiteCheckerFunction:
     Description: "Website Checker Function ARN"
     Value: !GetAtt WebsiteCheckerFunction.Arn
