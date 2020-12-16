@@ -37,6 +37,7 @@ Resources:
           Properties:
             Path: /checker
             Method: get
+            
   CreateTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -67,7 +68,7 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: DynamoDBGetParameterPolicy
+        - Sid: DynamoDBScanTablePolicy
           Effect: Allow
           Action:
           - dynamodb:Scan
@@ -78,6 +79,26 @@ Resources:
           Properties:
             Path: /todo-list/list
             Method: get
+  UpdateTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: update_todo/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: DynamoDBUpdateItemPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:UpdateItem
+          Resource: '*'
+      Events:
+        ListTodo:
+          Type: Api
+          Properties:
+            Path: /todo-list/update
+            Method: put
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
