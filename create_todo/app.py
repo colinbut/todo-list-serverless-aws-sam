@@ -23,8 +23,10 @@ def lambda_handler(event, context):
             'title': body.get('title'),
             'content': body.get('content'),
             'created_date': datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
+            'updated_date': None,
             'is_archived': False,
-            'is_deleted': False
+            'is_deleted': False,
+            'is_done': False
         }
     )
 
