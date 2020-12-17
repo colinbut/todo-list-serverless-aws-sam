@@ -35,7 +35,7 @@ Resources:
       MethodSettings:
         - DataTraceEnabled: true
           MetricsEnabled: true
-          LoggingLevel: "INFO"
+          #LoggingLevel: "INFO"
           HttpMethod: "*"
           ResourcePath: "/*"
 
@@ -118,6 +118,28 @@ Resources:
             Path: /todo-list/update
             Method: put
             RestApiId: !Ref ApiGateway
+  
+  CompleteTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: complete_todo/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: DynamoDBUpdateItemPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:UpdateItem
+          Resource: '*'
+      Events:
+        ListTodo:
+          Type: Api
+          Properties:
+            Path: /todo-list/complete/{item_id}
+            Method: post
+            RestApiId: !Ref ApiGateway          
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
@@ -133,6 +155,9 @@ Outputs:
   UpdateTodoApi:
     Description: "API Gateway endpoint URL for Prod stage for Update Todo function"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/update"
+  CompleteTodoApi:
+    Description: "API Gateway endpoint URL for Prod stage for Complete Todo function"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/complete/{item_id}"
   WebsiteCheckerFunction:
     Description: "Website Checker Function ARN"
     Value: !GetAtt WebsiteCheckerFunction.Arn
