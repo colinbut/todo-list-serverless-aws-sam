@@ -10,6 +10,7 @@ Globals:
     Timeout: 3
 
 Resources:
+
   DynamoDBDatabase:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -31,9 +32,12 @@ Resources:
       Description: The API Gateway for the Todo List Application
       StageName: Prod
       TracingEnabled: true
-      # MethodSettings:
-      #   - DataTraceEnabled: true
-      #     MetricsEnabled: true
+      MethodSettings:
+        - DataTraceEnabled: true
+          MetricsEnabled: true
+          LoggingLevel: "INFO"
+          HttpMethod: "*"
+          ResourcePath: "/*"
 
   WebsiteCheckerFunction:
     Type: AWS::Serverless::Function
