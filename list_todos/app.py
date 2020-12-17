@@ -1,5 +1,6 @@
 import json
 import boto3
+import json
 import logging
 
 logger = logging.getLogger()
@@ -14,5 +15,8 @@ def lambda_handler(event, context):
     results = table.scan()
 
     logger.info("results: {}".format(results))
-    return event
+    return {
+        "statusCode": 200,
+        "body": str(json.dumps(results))
+    }
 
