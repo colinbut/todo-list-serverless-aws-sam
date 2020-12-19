@@ -11,6 +11,22 @@ Globals:
 
 Resources:
 
+  DeleteQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: "delete-todo-queue"
+
+  QueueParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: "/todolist/deletequeue/url"
+      Type: String
+      Value: !Ref DeleteQueue
+      Description: SSM Parameter for the url of the todo list delete queue
+      Tags:
+        Environment: Dev
+
+
   DynamoDBDatabase:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -112,7 +128,7 @@ Resources:
           - dynamodb:UpdateItem
           Resource: '*'
       Events:
-        ListTodo:
+        UpdateTodo:
           Type: Api
           Properties:
             Path: /todo-list/update
@@ -134,12 +150,39 @@ Resources:
           - dynamodb:UpdateItem
           Resource: '*'
       Events:
-        ListTodo:
+        CompleteTodo:
           Type: Api
           Properties:
             Path: /todo-list/complete/{item_id}
             Method: post
-            RestApiId: !Ref ApiGateway          
+            RestApiId: !Ref ApiGateway       
+  MarkDeleteTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: mark_delete_todo/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+          - ssm:GetParameter
+          Resource: '*'
+      - Statement:
+        - Sid: SQSSendMessagePolicy
+          Effect: Allow
+          Action:
+          - sqs:SendMessage
+          Resource: '*'
+      Events:
+        MarkTodoDelete:
+          Type: Api
+          Properties:
+            Path: /todo-list/markdelete/{item_id}
+            Method: delete
+            RestApiId: !Ref ApiGateway
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
@@ -161,3 +204,6 @@ Outputs:
   WebsiteCheckerFunction:
     Description: "Website Checker Function ARN"
     Value: !GetAtt WebsiteCheckerFunction.Arn
+  DeleteQueueURL:
+    Description: "The queue url of the delete queue"
+    Value: !Ref DeleteQueue
