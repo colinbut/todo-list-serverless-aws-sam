@@ -26,6 +26,38 @@ Resources:
       Tags:
         Environment: Dev
 
+  AlarmTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: "delete-queue-alarm-notification"
+      TopicName: delete-queue-alarm-topic
+      Subscription:
+        - Protocol: "lambda"
+          Endpoint: !GetAtt DeleteTodoFunction.Arn
+
+  QueueDepthAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmDescription: "Alarm if queue depth increases to more than 10 messages"
+      Namespace: "AWS/SQS"
+      MetricName: "ApproximateNumberOfMessagesVisible"
+      Dimensions:
+        - 
+          Name: "QueueName"
+          Value: 
+            !GetAtt
+              - "DeleteQueue"
+              - "QueueName"
+      Statistic: "Sum"
+      Period: "300" # 5 mins
+      EvaluationPeriods: "1"
+      Threshold: "1"
+      ComparisonOperator: "GreaterThanOrEqualToThreshold"
+      AlarmActions:
+        - Ref: "AlarmTopic"
+      InsufficientDataActions:
+        - Ref: "AlarmTopic"
+
 
   DynamoDBDatabase:
     Type: AWS::DynamoDB::Table
@@ -183,6 +215,33 @@ Resources:
             Path: /todo-list/markdelete/{item_id}
             Method: delete
             RestApiId: !Ref ApiGateway
+  
+  DeleteTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: delete_todo/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: SSMGetParameterPolicy
+          Effect: Allow
+          Action:
+          - ssm:GetParameter
+          Resource: '*'
+      - Statement:
+        - Sid: SQSSendMessagePolicy
+          Effect: Allow
+          Action:
+          - sqs:ReceiveMessage
+          Resource: '*'
+      - Statement:
+        - Sid: DynamoDBUpdateItemPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:UpdateItem
+          Resource: '*'
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
