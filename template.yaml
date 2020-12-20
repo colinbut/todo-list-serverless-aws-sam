@@ -11,6 +11,11 @@ Globals:
 
 Resources:
 
+  ArchiveBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "todo-list-archive-bucket-cb"
+
   DeleteQueue:
     Type: AWS::SQS::Queue
     Properties:
@@ -242,6 +247,38 @@ Resources:
           Action:
           - dynamodb:UpdateItem
           Resource: '*'
+  
+  ArchiveTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: archive_todo/
+      Handler: app.lambda_handler
+      Runtime: python3.8
+      Tracing: Active
+      Policies:
+      - Statement:
+        - Sid: DynamoDBGetItemPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:GetItem
+          Resource: '*'
+        - Sid: DynamoDBUpdateItemPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:UpdateItem
+          Resource: '*'
+        - Sid: S3PutObjectPolicy
+          Effect: Allow
+          Action:
+          - s3:PutObject
+          Resource: '*'
+      Events:
+        ListTodo:
+          Type: Api
+          Properties:
+            Path: /todo-list/archive/{item_id}
+            Method: post
+            RestApiId: !Ref ApiGateway
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
@@ -260,6 +297,12 @@ Outputs:
   CompleteTodoApi:
     Description: "API Gateway endpoint URL for Prod stage for Complete Todo function"
     Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/complete/{item_id}"
+  MarkDeleteTodoApi:
+    Description: "API Gateway endpoint URL for Prod stage for Mark Delete Todo function"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/markdelete/{item_id}"
+  ArchiveTodoApi:
+    Description: "API Gateway endpoint URL for Prod stage for Archive Todo function"
+    Value: !Sub "https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/Prod/todo-list/archive/{item_id}"
   WebsiteCheckerFunction:
     Description: "Website Checker Function ARN"
     Value: !GetAtt WebsiteCheckerFunction.Arn
