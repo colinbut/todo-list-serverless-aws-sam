@@ -116,7 +116,7 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: DynamoDBPutParameterPolicy
+        - Sid: CreatePolicy
           Effect: Allow
           Action:
           - dynamodb:PutItem
@@ -138,7 +138,7 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: DynamoDBScanTablePolicy
+        - Sid: ListPolicy
           Effect: Allow
           Action:
           - dynamodb:Scan
@@ -159,7 +159,7 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: DynamoDBUpdateItemPolicy
+        - Sid: UpdatePolicy
           Effect: Allow
           Action:
           - dynamodb:UpdateItem
@@ -181,7 +181,7 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: DynamoDBUpdateItemPolicy
+        - Sid: CompletePolicy
           Effect: Allow
           Action:
           - dynamodb:UpdateItem
@@ -202,15 +202,10 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: SSMGetParameterPolicy
+        - Sid: MarkDeletePolicy
           Effect: Allow
           Action:
           - ssm:GetParameter
-          Resource: '*'
-      - Statement:
-        - Sid: SQSSendMessagePolicy
-          Effect: Allow
-          Action:
           - sqs:SendMessage
           Resource: '*'
       Events:
@@ -230,21 +225,11 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: SSMGetParameterPolicy
+        - Sid: DeletePolicy
           Effect: Allow
           Action:
           - ssm:GetParameter
-          Resource: '*'
-      - Statement:
-        - Sid: SQSSendMessagePolicy
-          Effect: Allow
-          Action:
           - sqs:ReceiveMessage
-          Resource: '*'
-      - Statement:
-        - Sid: DynamoDBUpdateItemPolicy
-          Effect: Allow
-          Action:
           - dynamodb:UpdateItem
           Resource: '*'
   
@@ -257,19 +242,11 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: DynamoDBGetItemPolicy
+        - Sid: ArchivePolicy
           Effect: Allow
           Action:
           - dynamodb:GetItem
-          Resource: '*'
-        - Sid: DynamoDBUpdateItemPolicy
-          Effect: Allow
-          Action:
           - dynamodb:UpdateItem
-          Resource: '*'
-        - Sid: S3PutObjectPolicy
-          Effect: Allow
-          Action:
           - s3:PutObject
           Resource: '*'
       Events:
@@ -289,7 +266,7 @@ Resources:
       Tracing: Active
       Policies:
       - Statement:
-        - Sid: S3ListBucketPolicy
+        - Sid: ListArchivePolicy
           Effect: Allow
           Action:
           - s3:ListBucket
