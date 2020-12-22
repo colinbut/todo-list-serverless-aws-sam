@@ -2,9 +2,9 @@ version = 0.1
 [default]
 [default.deploy]
 [default.deploy.parameters]
-stack_name = "todos-list-serverless"
+stack_name = "todo-list-serverless"
 s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-1112zt1fyq87o"
-s3_prefix = "todos-list-serverless"
+s3_prefix = "todo-list-serverless"
 region = "eu-west-1"
 confirm_changeset = true
 capabilities = "CAPABILITY_IAM CAPABILITY_AUTO_EXPAND"
