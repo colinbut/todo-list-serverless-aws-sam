@@ -8,6 +8,8 @@ Description: >
 Globals:
   Function:
     Timeout: 3
+    Tracing: Active
+    Runtime: python3.8
 
 Resources:
 
@@ -104,8 +106,6 @@ Resources:
     Properties:
       CodeUri: create_todo/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Environment:
         Variables:
           POWERTOOLS_LOGGER_LOG_EVENT: true
@@ -131,8 +131,6 @@ Resources:
     Properties:
       CodeUri: list_todos/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -154,8 +152,6 @@ Resources:
     Properties:
       CodeUri: update_todo/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -178,8 +174,6 @@ Resources:
     Properties:
       CodeUri: complete_todo/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -201,8 +195,6 @@ Resources:
     Properties:
       CodeUri: mark_delete_todo/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -226,8 +218,6 @@ Resources:
     Properties:
       CodeUri: delete_todo/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -245,8 +235,6 @@ Resources:
     Properties:
       CodeUri: archive_todo/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -271,8 +259,6 @@ Resources:
     Properties:
       CodeUri: list_archives/
       Handler: app.lambda_handler
-      Runtime: python3.8
-      Tracing: Active
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
