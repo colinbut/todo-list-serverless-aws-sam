@@ -9,6 +9,10 @@ This project contains source code and supporting files for a todo list serverles
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project.
 
+## Architecture
+
+![todolist](docs/todolist.png)
+
 ## Development
 
 If you prefer to use an integrated development environment (IDE) to build and test your application, you can use the AWS Toolkit.  
