@@ -1,11 +1,16 @@
 import boto3
 import json
 import logging
+from aws_lambda_powertools import Tracer, Logger
 
-logger = logging.getLogger()
+tracer = Tracer()
+logger = Logger()
+
 logger.setLevel(logging.INFO)
 
 
+@logger.inject_lambda_context
+@tracer.capture_lambda_handler
 def lambda_handler(event, context):
     logger.info("Event:{}".format(event))
 

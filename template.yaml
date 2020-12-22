@@ -11,6 +11,13 @@ Globals:
 
 Resources:
 
+  AwsLambdaPowertoolsPythonLayer:
+    Type: AWS::Serverless::Application
+    Properties:
+      Location:
+        ApplicationId: arn:aws:serverlessrepo:eu-west-1:057560766410:applications/aws-lambda-powertools-python-layer
+        SemanticVersion: 1.3.1 # change to latest semantic version available in SAR
+
   ArchiveBucket:
     Type: AWS::S3::Bucket
     Properties:
@@ -99,6 +106,11 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Environment:
+        Variables:
+          POWERTOOLS_LOGGER_LOG_EVENT: true
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: CreatePolicy
@@ -121,6 +133,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: ListPolicy
@@ -142,6 +156,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: UpdatePolicy
@@ -164,6 +180,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: CompletePolicy
@@ -185,6 +203,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: MarkDeletePolicy
@@ -208,6 +228,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: DeletePolicy
@@ -225,6 +247,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: ArchivePolicy
@@ -249,6 +273,8 @@ Resources:
       Handler: app.lambda_handler
       Runtime: python3.8
       Tracing: Active
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
       - Statement:
         - Sid: ListArchivePolicy

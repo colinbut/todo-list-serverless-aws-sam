@@ -3,11 +3,15 @@ from botocore.exceptions import ClientError
 import json
 import logging
 from datetime import datetime
+from aws_lambda_powertools import Tracer, Logger
 
-logger = logging.getLogger()
+tracer = Tracer()
+logger = Logger()
+
 logger.setLevel(logging.INFO)
 
 
+@tracer.capture_method
 def prep_archive_content(item_id, response):
     with open('/tmp/{}.csv'.format(item_id), 'w') as archive:
         # write csv header
@@ -20,6 +24,7 @@ def prep_archive_content(item_id, response):
         archive.write(entry)
 
 
+@tracer.capture_method
 def mark_item_archived(item_id, dynamodb_table):
     dynamodb_table.update_item(
         Key={
@@ -34,6 +39,8 @@ def mark_item_archived(item_id, dynamodb_table):
     )
 
 
+@logger.inject_lambda_context
+@tracer.capture_lambda_handler
 def lambda_handler(event, context):
     logger.info("Event:{}".format(event))
 

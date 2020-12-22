@@ -3,10 +3,15 @@ import boto3
 import uuid
 import logging
 from datetime import datetime
+from aws_lambda_powertools import Tracer, Logger
 
-logger = logging.getLogger()
+tracer = Tracer()
+logger = Logger()
+
 logger.setLevel(logging.INFO)
 
+@logger.inject_lambda_context
+@tracer.capture_lambda_handler
 def lambda_handler(event, context):
     logger.debug("event: {}".format(event))
     logger.debug("context: {}".format(context))
