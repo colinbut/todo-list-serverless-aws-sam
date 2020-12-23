@@ -8,7 +8,7 @@ from aws_lambda_powertools import Tracer, Logger
 tracer = Tracer()
 logger = Logger()
 
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 
 @tracer.capture_method
@@ -26,7 +26,7 @@ def prep_archive_content(item_id, response):
 
 @tracer.capture_method
 def mark_item_archived(item_id, dynamodb_table):
-    dynamodb_table.update_item(
+    response = dynamodb_table.update_item(
         Key={
             'item_id': item_id
         },
@@ -37,6 +37,7 @@ def mark_item_archived(item_id, dynamodb_table):
         },
         ReturnValues="UPDATED_NEW"
     )
+    return response
 
 
 @logger.inject_lambda_context
@@ -75,6 +76,7 @@ def lambda_handler(event, context):
             return {'statusCode': 502, 'body': '{ message: "Error archiving todo: " + ex }'}
 
         response_message = { "message": "successfully archived item: {}".format(item_id) }
+        logger.debug(response_message)
 
         return {
             'statusCode': 200,
@@ -84,4 +86,4 @@ def lambda_handler(event, context):
     except ClientError as e:
         logger.error(e)
         
-        return { 'statusCode': 502 }
+        return { 'statusCode': 502, 'body': "Error: {}".format(e) }
