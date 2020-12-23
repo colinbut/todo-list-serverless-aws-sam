@@ -113,6 +113,8 @@ The AWS Toolkit is an open source plug-in for popular IDEs that uses the SAM CLI
 - SQS
 - SNS
 - X-Ray
+- Systems Manager
+  - Parameter Store (SSM)
 - CloudWatch
   - CloudWatch Alarms
 
