@@ -9,9 +9,89 @@ This project contains source code and supporting files for a todo list serverles
 
 The application uses several AWS resources, including Lambda functions and an API Gateway API. These resources are defined in the `template.yaml` file in this project.
 
+## Project Summary
+
+This todo list application is a web API for a todo list application. It is built using serverless technologies in complete native AWS services. This project is a bit contrived in its business requirements/features where they are specified, designed by myself. 
+
+The todo list API allows you to:
+
+- create new todos
+- update existing todos
+- list all todos (incl. archived ones)
+- delete existing todos
+- archived todos
+- mark todos as done
+
 ## Architecture
 
 ![todolist](docs/todolist.png)
+
+## API Guide
+
+This section provides in-depth guide on the APIs.
+### Create new Todos
+
+To create new todos, make a post request to:
+
+e.g.
+```bash
+curl -X POST -d '{"title": "todo title", "content": "the content"}' http://{todo-list-api}/todo-list/create
+```
+
+### Update existing Todo
+
+To update existing todos, make the following request:
+
+e.g.
+
+```bash
+curl -X PUT -d '{"item_id": "e99b8e6d-40a0-11eb-8288-3be6f58d0c20", "title": "updated title", "content": "updated content"}' http://{todo-list-api}/todo-list/update
+```
+
+### List all Todos
+
+To fetch all the todos;
+
+```bash
+curl http://{todo-list-api}/todo-list/
+```
+
+### Delete existing Todos
+
+Todos are not permanently deleted. They are marked as 'deleted' with the `is_deleted` flag set to `true`. 
+
+To delete a todo you need to 'mark' it as "deleted" first by hitting the markdelete endpoint:
+
+```bash
+curl -X DELETE http://{todo-list-api}/todo-list/markdelete/{item_id}
+# where item_id = the id of the todo item you want to delete
+```
+
+This request doesn't delete the todo but instead request for the todo to be deleted by sending a request to a backend queue (SQS) for delete processing. The delete queue triggers a mark deletion when the queue messages hit a certain threshold thereby trigger a CloudWatch Alarm which in term sends a notification to the topic (SNS Topic). A lambda subscription then triggers the actual delete lambda function to do the actual "mark deletion".
+
+Overall, the todo stays within the DynamoDB table without ever being permanently removed. This is purely a business decision made by myself.
+
+### Archive Todos
+
+When archiving the todo, it marks the todo item as "archived" with the `is_archived` flag set to `true` for the todo item and send a csv file equivalent of the todo to a S3 bucket that stores the archives.
+
+```bash
+curl -X POST http://{todo-list-api}/todo-list/archive/{item_id}
+
+# where item_id is the id of the todo item
+```
+
+### Mark Todos as Done
+
+When marking a todo as "Done", make a request like the following:
+
+```bash
+curl -X POST http://{todo-list-api}/todo-list/complete/{item_id}
+
+# where item_id is the id of the todo item
+```
+
+When 'completing' the todo we just mark it as "Complete" by setting the `is_done` flag of the todo item to `true`.
 
 ## Development
 
