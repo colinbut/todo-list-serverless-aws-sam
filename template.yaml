@@ -8,6 +8,7 @@ Description: >
 Globals:
   Function:
     Timeout: 3
+    Handler: app.lambda_handler
     Tracing: Active
     Runtime: python3.8
 
@@ -104,8 +105,7 @@ Resources:
   CreateTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: create_todo/
-      Handler: app.lambda_handler
+      CodeUri: src/create_todo/
       Environment:
         Variables:
           POWERTOOLS_LOGGER_LOG_EVENT: true
@@ -129,8 +129,7 @@ Resources:
   ListTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: list_todos/
-      Handler: app.lambda_handler
+      CodeUri: src/list_todos/
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -150,8 +149,7 @@ Resources:
   UpdateTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: update_todo/
-      Handler: app.lambda_handler
+      CodeUri: src/update_todo/
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -172,8 +170,7 @@ Resources:
   CompleteTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: complete_todo/
-      Handler: app.lambda_handler
+      CodeUri: src/complete_todo/
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -193,8 +190,7 @@ Resources:
   MarkDeleteTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: mark_delete_todo/
-      Handler: app.lambda_handler
+      CodeUri: src/mark_delete_todo/
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -216,8 +212,7 @@ Resources:
   DeleteTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: delete_todo/
-      Handler: app.lambda_handler
+      CodeUri: src/delete_todo/
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -233,8 +228,7 @@ Resources:
   ArchiveTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: archive_todo/
-      Handler: app.lambda_handler
+      CodeUri: src/archive_todo/
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
@@ -257,8 +251,7 @@ Resources:
   ListArchiveTodoFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: list_archives/
-      Handler: app.lambda_handler
+      CodeUri: src/list_archives/
       Layers:
         - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
       Policies:
