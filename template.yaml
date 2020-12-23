@@ -269,6 +269,27 @@ Resources:
             Method: get
             RestApiId: !Ref ApiGateway
 
+  GetTodoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/get_todo/
+      Layers:
+        - !GetAtt AwsLambdaPowertoolsPythonLayer.Outputs.LayerVersionArn
+      Policies:
+      - Statement:
+        - Sid: GetTodoPolicy
+          Effect: Allow
+          Action:
+          - dynamodb:GetItem
+          Resource: '*'
+      Events:
+        GetTodo:
+          Type: Api
+          Properties:
+            Path: /todo-list/{item_id}
+            Method: get
+            RestApiId: !Ref ApiGateway
+
 
 Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
