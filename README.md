@@ -16,6 +16,7 @@ This todo list application is a web API for a todo list application. It is built
 The todo list API allows you to:
 
 - create new todos
+- get existing todo
 - update existing todos
 - list all todos (incl. archived ones)
 - delete existing todos
@@ -36,6 +37,12 @@ To create new todos, make a post request to:
 e.g.
 ```bash
 curl -X POST -d '{"title": "todo title", "content": "the content"}' http://{todo-list-api}/todo-list/create
+```
+
+### Get Todo
+
+```bash
+curl http://{todo-list-api}/todo-list/{item_id}
 ```
 
 ### Update existing Todo
