@@ -78,7 +78,7 @@ This request doesn't delete the todo but instead request for the todo to be dele
 
 Overall, the todo stays within the DynamoDB table without ever being permanently removed. This is purely a business decision made by myself.
 
-### Archive Todos
+### Archive Todos
 
 When archiving the todo, it marks the todo item as "archived" with the `is_archived` flag set to `true` for the todo item and send a csv file equivalent of the todo to a S3 bucket that stores the archives.
 
